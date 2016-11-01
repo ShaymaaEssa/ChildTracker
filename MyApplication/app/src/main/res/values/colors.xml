@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="dot_dark_splash">#2278d4</color>
+    <color name="dot_light_splash">#93c6fd</color>
+    <color name="dark_blue">#29506f</color>
+    <color name="white">#ffffff</color>
+    <color name="hint">#808080</color>
+    <color name="Cyan">#52cbcc</color>
+
+    <color name="primary">#3F51B5</color>
+    <color name="primary_dark">#303F9F</color>
+    <color name="accent">#FF4081</color>
+    <color name="fragment_bg">#e5e5e5</color>
+    <color name="teal">#80CBC4</color>
+
+    <color name="colorPrimary">#0097A7</color>
+    <color name="colorPrimaryDark">#006064</color>
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
+    <color name="colorAccent">#FF80AB</color>
+</resources>

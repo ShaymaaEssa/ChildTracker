@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">ChildTracker</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="base_url_phpfiles">http://medicalapp.site88.net/ChildTracker/</string>
+    <string name="google_map_key">AIzaSyAmh73TSSUl_U3NrnuCn_OopQeV_CK5yI0</string>
+    <string name="btn_splash_login">Login</string>
+    <string name="btn_splash_signup">Register</string>
+    <string name="btn_splash_register">Register</string>
+    <string name="etxt_deliveryorder_password">Password</string>
+    <string name="etxt_login_mail">E-Mail</string>
+    <string name="etxt_login_password">Password</string>
+    <string name="etxt_Register_name">Name</string>
+    <string name="etxt_Register_mail">E-Mail</string>
+    <string name="etxt_Register_password">Password</string>
+    <string name="btn_register_register">Register</string>
+    <string name="btn_login_login">Login</string>
+    <string name="navigation_item_map">Map</string>
+    <string name="navigation_item_places">Places</string>
+    <string name="navigation_item_joinmember">Join A Member</string>
+    <string name="navigation_item_invitefriend">Invite A Friend</string>
+    <string name="action_search">Search</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
