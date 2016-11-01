@@ -10,13 +10,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/img_navdrawer_icon"
         android:src="@drawable/map"
+        android:paddingLeft="20dp"
         />
 
     <TextView
         android:id="@+id/txt_navdrawer_menuitem"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="30dp"
+        android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:textSize="15dp"
