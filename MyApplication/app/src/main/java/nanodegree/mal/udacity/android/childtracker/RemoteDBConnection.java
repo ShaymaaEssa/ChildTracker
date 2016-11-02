@@ -27,12 +27,13 @@ public class RemoteDBConnection {
     private RetrofitConnection retrofitConnection; //interface
     private List<FollowersLocation> followersLocations; //contain result
     private NotifyFollowersLocations notifyFollowersLocations;
-    private String userId = "1"; //for debugging
+    private String userId ; //for debugging
 
     public RemoteDBConnection(Context context,NotifyFollowersLocations notifyFollowersLocations)
     {
         this.context = context;
         this.notifyFollowersLocations = notifyFollowersLocations;
+        userId = context.getSharedPreferences(MyPreferences.MY_PREFERENCES, Context.MODE_PRIVATE).getString(MyPreferences.USER_ID,"0");
     }
 
     public void createRetrofitConnection(){

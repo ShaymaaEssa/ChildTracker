@@ -60,7 +60,7 @@
             android:id="@+id/etxt_Register_name"
             android:ems="17"
             android:layout_marginLeft="30dp"
-            android:inputType="textEmailAddress"
+            android:inputType="textCapWords"
             android:singleLine="true"
             android:textColor="@color/white"
             android:background="@android:color/transparent"
@@ -147,7 +147,7 @@
             android:textSize="12sp"
             android:hint="@string/etxt_Register_password"
             android:textColorHint="@color/hint"/>
-        <requestFocus/>
+
     </LinearLayout>
 
     <View

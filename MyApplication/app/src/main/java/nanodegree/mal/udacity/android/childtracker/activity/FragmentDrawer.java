@@ -89,7 +89,7 @@ public class FragmentDrawer extends Fragment {
         View layout = inflater.inflate(R.layout.fragment_navigationdrawer, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycleview_navdrawer_drawerList);
 
-        adapter = new NavigationDrawerAdapter(getActivity(), getData());
+        adapter = new NavigationDrawerAdapter(getActivity(), getData(),1);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(),recyclerView,new ClickListener(){

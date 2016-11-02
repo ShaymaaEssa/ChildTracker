@@ -34,51 +34,56 @@ public class SplashActivity extends AppCompatActivity {
         getSupportActionBar().hide(); //<<  to hide action bar
         setContentView(R.layout.activity_splash);
 
-        if ( MyPreferences.isFirst(SplashActivity.this)){
-
+        if ( !MyPreferences.isFirst(SplashActivity.this)){
+            Intent intent = new Intent(SplashActivity.this,TestActivity.class);
+            startActivity(intent);
+            finish();
         }
-        if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        else {
+            if (Build.VERSION.SDK_INT >= 21) {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            }
+
+
+            viewPager = (ViewPager) findViewById(R.id.viewpager_splash);
+            dotsLayout = (LinearLayout) findViewById(R.id.linearlayout_splash_layoutDots);
+            //btnLogin = (Button)findViewById(R.id.btn_splash_login);
+            btnRegister = (Button) findViewById(R.id.btn_splash_register);
+
+            layouts = new int[]{
+                    R.layout.splash_slider1,
+                    R.layout.splash_slider2,
+                    R.layout.splash_slider3
+            };
+
+            // adding bottom dots
+            addBottomDots(0);
+
+            // making notification bar transparent
+            changeStatusBarColor();
+
+            myViewPagerAdapter = new MyViewPagerAdapter();
+            viewPager.setAdapter(myViewPagerAdapter);
+            viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
+
+
+//        btnLogin.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                Intent intent = new Intent(SplashActivity.this,LoginActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+
+            btnRegister.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(SplashActivity.this, RegisterActivity.class);
+                    startActivity(intent);
+                }
+            });
         }
-
-
-        viewPager = (ViewPager)findViewById(R.id.viewpager_splash);
-        dotsLayout = (LinearLayout)findViewById(R.id.linearlayout_splash_layoutDots);
-        btnLogin = (Button)findViewById(R.id.btn_splash_login);
-        btnRegister = (Button)findViewById(R.id.btn_splash_register);
-
-        layouts = new int[] {
-                R.layout.splash_slider1,
-                R.layout.splash_slider2,
-                R.layout.splash_slider3
-        };
-
-        // adding bottom dots
-        addBottomDots(0);
-
-        // making notification bar transparent
-        changeStatusBarColor();
-
-        myViewPagerAdapter = new MyViewPagerAdapter();
-        viewPager.setAdapter(myViewPagerAdapter);
-        viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
-
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(SplashActivity.this,LoginActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SplashActivity.this,RegisterActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     private int getItem(int i) {

@@ -65,7 +65,7 @@ public class TestActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private void displayView(int position) {
         Fragment fragment = null;
         String title = getString(R.string.app_name);
-        switch (position) {
+        switch (position-1) { //we subtract 1 because of  header position
             case 0:
                 fragment = new MainFragment();
                 title = "MAP";

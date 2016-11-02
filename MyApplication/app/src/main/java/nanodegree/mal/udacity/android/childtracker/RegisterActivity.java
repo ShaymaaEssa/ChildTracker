@@ -16,6 +16,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +31,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     String url;
     boolean accountCreated = false;
+
+    String userId;
+    String validateName ;
+    String validateMail ;
+    String validatePassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,16 +69,27 @@ public class RegisterActivity extends AppCompatActivity {
         StringRequest registerUserRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if(response.contains("created")){
-                    Toast.makeText(RegisterActivity.this, "Account Created", Toast.LENGTH_LONG).show();
-                    accountCreated = true;
 
+                try {
+                    JSONObject responseParsing = new JSONObject(response);
+                    String resultVar = responseParsing.getString("result");
+                    if (resultVar.contains("created")){
+                        userId = responseParsing.getString("user_id");
+                        Toast.makeText(RegisterActivity.this, "Account Created,"+userId, Toast.LENGTH_SHORT).show();
+                        accountCreated = true;
+
+                        setPreferencesSetting();
+
+                        Intent intent = new Intent(RegisterActivity.this,TestActivity.class);
+                        startActivity(intent);
+
+                    }else {
+                        Toast.makeText(RegisterActivity.this, resultVar, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(RegisterActivity.this, "Error in Json Handling", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
                 }
-
-                else {
-                    Toast.makeText(RegisterActivity.this, response, Toast.LENGTH_LONG).show();
-                }
-
 
             }
 
@@ -83,15 +102,24 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap map  = new HashMap();
-                map.put("name",etxt_name.getText().toString());
-                map.put("email",etxt_mail.getText().toString());
-                map.put("password",etxt_password.getText().toString());
+                map.put("name",validateName);
+                map.put("email",validateMail);
+                map.put("password",validatePassword);
                 return map;
             }
         };
 
         Volley.newRequestQueue(this).add(registerUserRequest);
     }
+
+    private void setPreferencesSetting() {
+        //the account created successfully so next time we don't need to open register screen
+        MyPreferences.setFirst(false);
+
+        //set the user info in the shared preferences
+        MyPreferences.setUserInfo(userId,validateName,validateMail);
+    }
+
 
     private void initControls() {
         etxt_name = (EditText)findViewById(R.id.etxt_Register_name);
@@ -101,9 +129,9 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean validateParameters() {
-        String validateName = etxt_name.getText().toString();
-        String validateMail = etxt_mail.getText().toString();
-        String validatePassword = etxt_password.getText().toString();
+        validateName = etxt_name.getText().toString();
+        validateMail = etxt_mail.getText().toString();
+        validatePassword = etxt_password.getText().toString();
 
         if(TextUtils.isEmpty(validateName) || validateName.length() < 4) {
             etxt_name.setError("Please Enter Your Full Name");
