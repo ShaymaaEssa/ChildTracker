@@ -27,8 +27,10 @@
         android:layout_gravity="center"
         android:text="Track your Child"
         android:textColor="@color/white"
-        android:textSize="25sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:gravity="center_horizontal"
+        android:textSize="30dp"
+        />
 
     <View
         android:layout_width="260dp"
