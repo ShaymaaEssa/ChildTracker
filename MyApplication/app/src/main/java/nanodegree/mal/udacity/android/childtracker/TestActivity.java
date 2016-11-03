@@ -33,7 +33,7 @@ public class TestActivity extends AppCompatActivity implements FragmentDrawer.Fr
         fragmentDrawer.setFragmentDrawerListener(this);
 
         // display the first navigation drawer view on app launch
-        displayView(0);
+        displayView(1);
     }
 
     @Override
