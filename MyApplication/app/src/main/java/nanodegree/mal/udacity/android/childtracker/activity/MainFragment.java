@@ -122,11 +122,6 @@ public class MainFragment extends Fragment implements
         }
     }
 
-//    private void initMap() {
-//        mapFragment = (MapFragment)getActivity().getFragmentManager().findFragmentById(R.id.frag_mapfragment_map);
-//        mapFragment.getMapAsync(this);
-//
-//    }
 
     @Override
     public void onResume() {
@@ -135,12 +130,6 @@ public class MainFragment extends Fragment implements
 
         if (googleMap != null)
             googleMap.clear();
-//        if (followerMarker != null){
-//            for (Marker m : followerMarker) {
-//                m.remove();
-//
-//            }
-//        }
         getFollowersLocation();
 
         //timer to execute code of retrieving followers location every 15 min from the database and update map

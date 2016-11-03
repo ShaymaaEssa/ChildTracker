@@ -18,7 +18,7 @@
     <string name="btn_login_login">Login</string>
     <string name="navigation_item_map">Map</string>
     <string name="navigation_item_places">Places</string>
-    <string name="navigation_item_joinmember">Join A Member</string>
+    <string name="navigation_item_joinmember">Join A Parent</string>
     <string name="navigation_item_invitefriend">Invite A Friend</string>
     <string name="action_search">Search</string>
 
@@ -27,19 +27,24 @@
 
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string name="txt_popup_title">Join Parent by ID</string>
+    <string name="txt_popup_description">Enter the parent ID, which can found under the user name in the navigation menu</string>
+    <string name="txt_popup_parentid">Parent ID</string>
+    <string name="btn_popup_cancel">Cancel</string>
+    <string name="btn_popup_join">Join</string>
 
 
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
         <item>@string/navigation_item_map</item>
-        <item>@string/navigation_item_places</item>
+        <!--<item>@string/navigation_item_places</item>-->
         <item>@string/navigation_item_joinmember</item>
         <item>@string/navigation_item_invitefriend</item>
     </string-array>
 
     <integer-array name="nav_drawer_icons">
         <item>@drawable/map</item>
-        <item>@drawable/places</item>
+        <!--<item>@drawable/places</item>-->
         <item>@drawable/joinmember</item>
         <item>@drawable/addfriend</item>
     </integer-array>

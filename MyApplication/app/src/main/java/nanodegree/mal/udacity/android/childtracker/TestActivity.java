@@ -1,5 +1,7 @@
 package nanodegree.mal.udacity.android.childtracker;
 
+import android.content.Context;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -7,18 +9,40 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.PopupWindow;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import nanodegree.mal.udacity.android.childtracker.activity.FragmentDrawer;
 import nanodegree.mal.udacity.android.childtracker.activity.MainFragment;
-import nanodegree.mal.udacity.android.childtracker.activity.PlacesFragment;
+import nanodegree.mal.udacity.android.childtracker.activity.JoinParentFragment;
 
 public class TestActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener{
 
     private Toolbar toolbar;
     private FragmentDrawer fragmentDrawer;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,13 +95,9 @@ public class TestActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 title = "MAP";
                 break;
             case 1:
-                fragment = new PlacesFragment();
-                title = "Places";
+                fragment = new JoinParentFragment();
+                title = "Join Parent";
                 break;
-//            case 2:
-//                fragment = new MessagesFragment();
-//                title = getString(R.string.title_messages);
-//                break;
             default:
                 break;
         }
@@ -92,4 +112,5 @@ public class TestActivity extends AppCompatActivity implements FragmentDrawer.Fr
             getSupportActionBar().setTitle(title);
         }
     }
+
 }

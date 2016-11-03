@@ -51,7 +51,7 @@ public class LocationUpdateService extends Service implements android.location.L
     final static float UPDATE_EVERY_DISTANCE = 100f; //100 meter
 
     String url;
-    String userId = "2"; //for test
+    String userId = getApplicationContext().getSharedPreferences(MyPreferences.MY_PREFERENCES, Context.MODE_PRIVATE).getString(MyPreferences.USER_ID,"0");
 
     static {
         state = State.IDLE;
