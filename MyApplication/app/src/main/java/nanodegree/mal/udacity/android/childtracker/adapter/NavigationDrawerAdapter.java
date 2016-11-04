@@ -14,7 +14,6 @@ import java.util.List;
 
 import nanodegree.mal.udacity.android.childtracker.MyPreferences;
 import nanodegree.mal.udacity.android.childtracker.R;
-import nanodegree.mal.udacity.android.childtracker.TestActivity;
 import nanodegree.mal.udacity.android.childtracker.model.NavDrawerItem;
 
 /**

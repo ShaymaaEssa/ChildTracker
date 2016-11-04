@@ -12,6 +12,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context="nanodegree.mal.udacity.android.childtracker.activity.MainFragment">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:id="@+id/linearlayout_mainfrag_buttons"
+        android:orientation="horizontal"
+        />
     </LinearLayout>
 
     <!--<fragment-->

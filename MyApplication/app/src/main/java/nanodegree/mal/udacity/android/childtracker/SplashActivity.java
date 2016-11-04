@@ -35,7 +35,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         if ( !MyPreferences.isFirst(SplashActivity.this)){
-            Intent intent = new Intent(SplashActivity.this,TestActivity.class);
+            Intent intent = new Intent(SplashActivity.this,MainActivity.class);
             startActivity(intent);
             finish();
         }
@@ -47,7 +47,7 @@ public class SplashActivity extends AppCompatActivity {
 
             viewPager = (ViewPager) findViewById(R.id.viewpager_splash);
             dotsLayout = (LinearLayout) findViewById(R.id.linearlayout_splash_layoutDots);
-            //btnLogin = (Button)findViewById(R.id.btn_splash_login);
+            btnLogin = (Button)findViewById(R.id.btn_splash_login);
             btnRegister = (Button) findViewById(R.id.btn_splash_register);
 
             layouts = new int[]{
@@ -67,14 +67,14 @@ public class SplashActivity extends AppCompatActivity {
             viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
 
-//        btnLogin.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                Intent intent = new Intent(SplashActivity.this,LoginActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(SplashActivity.this,LoginActivity.class);
+                startActivity(intent);
+            }
+        });
 
             btnRegister.setOnClickListener(new View.OnClickListener() {
                 @Override

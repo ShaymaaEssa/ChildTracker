@@ -16,9 +16,15 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -35,6 +41,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -97,6 +105,10 @@ public class MainFragment extends Fragment implements
     final int FIFTEEN_INTERVAL = 3* 60 * 1000;
 
     Timer timer;
+
+    //buttons layout
+    View rootView;
+    LinearLayout mapFragLayout;
 
 
     public MainFragment() {
@@ -258,8 +270,26 @@ public class MainFragment extends Fragment implements
         Log.w(TAG, "onConnectionFailed()");
     }
 
+    LinearLayout buttonLayout;
+    HashMap<String,LatLng> spinnerMap;
     @Override
     public void notifyLocations(List<FollowersLocation> list) {
+
+
+        mapFragLayout = (LinearLayout)rootView.findViewById(R.id.linearlayout_mainfrag_buttons);
+        LinearLayout spinnerLayout = new LinearLayout(getActivity());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        params.gravity = Gravity.CENTER_HORIZONTAL;
+
+        mapFragLayout.addView(spinnerLayout,params);
+        //spinnerLayout.removeAllViews();
+
+        Spinner spinner = new Spinner(getActivity());
+        ArrayList<String> spinnerArray = new ArrayList<String>();
+        spinnerMap = new HashMap<String, LatLng>();
 
         if (followerMarker != null) {
             for (int i = 0; i < followerMarker.length; i++) {
@@ -284,7 +314,34 @@ public class MainFragment extends Fragment implements
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(latLng);
                 googleMap.animateCamera(cameraUpdate);
             }
+
+            spinnerMap.put(item.getUser_name(),latLng);
+            spinnerArray.add(item.getUser_name());
         }
+
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, spinnerArray);
+        spinner.setAdapter(spinnerArrayAdapter);
+        spinnerLayout.addView(spinner);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String name = adapterView.getSelectedItem().toString();
+                camera(name);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+    }
+
+    private void camera(String name) {
+        LatLng id = spinnerMap.get(name);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(id);
+        googleMap.animateCamera(cameraUpdate);
     }
 
     @Override
@@ -295,10 +352,11 @@ public class MainFragment extends Fragment implements
     }
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        rootView = inflater.inflate(R.layout.fragment_main, container, false);
         // Inflate the layout for this fragment
         //initMap();
         createGoogleApi();

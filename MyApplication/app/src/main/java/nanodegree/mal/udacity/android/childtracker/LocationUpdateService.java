@@ -51,8 +51,7 @@ public class LocationUpdateService extends Service implements android.location.L
     final static float UPDATE_EVERY_DISTANCE = 100f; //100 meter
 
     String url;
-    String userId = getApplicationContext().getSharedPreferences(MyPreferences.MY_PREFERENCES, Context.MODE_PRIVATE).getString(MyPreferences.USER_ID,"0");
-
+    String userId ;
     static {
         state = State.IDLE;
     }
@@ -83,6 +82,8 @@ public class LocationUpdateService extends Service implements android.location.L
     //if return type = "Service.START_NOT_STICKY" --> the system will not rerun the service
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        userId = getApplicationContext().getSharedPreferences(MyPreferences.MY_PREFERENCES, Context.MODE_PRIVATE).getString(MyPreferences.USER_ID,"0");
+
         Log.i("Myprog_locupdateservice", "On start command");
         if (state == State.IDLE) {
             state = State.WORKING;
