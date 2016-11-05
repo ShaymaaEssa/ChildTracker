@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         userId = this.getSharedPreferences(MyPreferences.MY_PREFERENCES, Context.MODE_PRIVATE).getString(MyPreferences.USER_ID,"0");
 
+       // startService(new Intent(MainActivity.this,LocationUpdateService.class));
+
         fragmentDrawer = (FragmentDrawer)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         fragmentDrawer.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar);

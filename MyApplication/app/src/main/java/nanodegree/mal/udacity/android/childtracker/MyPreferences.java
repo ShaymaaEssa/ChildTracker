@@ -20,11 +20,6 @@ public class MyPreferences {
     public static boolean isFirst(Context context){
         reader = context.getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
         firstTime = reader.getBoolean("is_first", true);
-        if(firstTime){
-            final SharedPreferences.Editor editor = reader.edit();
-            editor.putBoolean("is_first", false);
-            editor.commit();
-        }
         return firstTime;
     }
 

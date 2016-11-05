@@ -14,11 +14,12 @@
         tools:context="nanodegree.mal.udacity.android.childtracker.activity.MainFragment">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:id="@+id/linearlayout_mainfrag_buttons"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/linearlayout_mainfrag_userscontrol"
         android:orientation="horizontal"
+        android:background="@color/colorPrimary"
         />
     </LinearLayout>
 

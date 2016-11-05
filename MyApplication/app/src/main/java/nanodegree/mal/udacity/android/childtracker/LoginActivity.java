@@ -1,6 +1,7 @@
 package nanodegree.mal.udacity.android.childtracker;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -35,6 +36,10 @@ public class LoginActivity extends AppCompatActivity {
     String url;
     String userId;
     String userName;
+    String userEmail;
+
+    boolean userLogged = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,16 +59,18 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "You Must Enter Your Email And Password", Toast.LENGTH_LONG).show();
                 } else {
                     checkLogin();
-                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                    startActivity(intent);
-                }
 
+                }
 
 
             }
         });
 
     }
+
+//    private void registerComponents() {
+//        this.registerReceiver(new NetworkChangeReceiver(),new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+//    }
 
     private void checkLogin() {
         //check login info with the info in database
@@ -79,8 +86,15 @@ public class LoginActivity extends AppCompatActivity {
                         JSONObject currentObject = userArray.getJSONObject(0);
                         userId = currentObject.getString("user_id");
                         userName = currentObject.getString("user_name");
+                        userEmail = currentObject.getString("email");
 
+                        MyPreferences.setUserInfo(userId,userName,userEmail);
+                        userLogged = true;
                         Toast.makeText(LoginActivity.this,"Welcome "+userName+"!",Toast.LENGTH_SHORT).show();
+
+                        MyPreferences.setFirst(false);
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
 
                     }catch (JSONException e){
                         e.printStackTrace();
@@ -109,6 +123,8 @@ public class LoginActivity extends AppCompatActivity {
         };
         Volley.newRequestQueue(this).add(checkLoginRequest);
     }
+
+
 
     private void initControls() {
         etxt_email = (EditText)findViewById(R.id.etxt_login_mail);

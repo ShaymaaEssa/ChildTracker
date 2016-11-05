@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -34,7 +33,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -81,11 +79,6 @@ public class MainFragment extends Fragment implements
 
     private LocationRequest locationRequest;
 
-    // Defined in mili seconds.
-    // This number in extremely low, and should be used only for debug
-    private final int UPDATE_INTERVAL =  900000; //milli second
-    private final int FASTEST_INTERVAL = 500000;
-
     //marker for the map
     private Marker locationMarker;
 
@@ -95,10 +88,6 @@ public class MainFragment extends Fragment implements
     //marker for followers
     Marker[] followerMarker;
 
-    //for navigation drawer
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
-    Toolbar toolbar ;
 
     NowLocation nowLocationObject;
 
@@ -106,9 +95,14 @@ public class MainFragment extends Fragment implements
 
     Timer timer;
 
-    //buttons layout
+    float zoom = 14f;
+
+    //spinner layout
     View rootView;
-    LinearLayout mapFragLayout;
+    LinearLayout usersControlLayout;
+    ArrayList<String> spinnerArray;
+    LinearLayout spinnerLayout;
+    Spinner spinner;
 
 
     public MainFragment() {
@@ -227,7 +221,6 @@ public class MainFragment extends Fragment implements
             if (locationMarker != null)
                 locationMarker.remove();
             locationMarker = googleMap.addMarker(markerOptions);
-            float zoom = 14f;
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng,zoom);
             //CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(latLng);
             googleMap.animateCamera(cameraUpdate);
@@ -270,26 +263,22 @@ public class MainFragment extends Fragment implements
         Log.w(TAG, "onConnectionFailed()");
     }
 
-    LinearLayout buttonLayout;
+
     HashMap<String,LatLng> spinnerMap;
+
+
     @Override
     public void notifyLocations(List<FollowersLocation> list) {
 
 
-        mapFragLayout = (LinearLayout)rootView.findViewById(R.id.linearlayout_mainfrag_buttons);
-        LinearLayout spinnerLayout = new LinearLayout(getActivity());
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
+        if (spinnerMap != null)
+            spinnerMap.clear();
+        if (spinnerArray != null)
+            spinnerArray.clear();
 
-        params.gravity = Gravity.CENTER_HORIZONTAL;
-
-        mapFragLayout.addView(spinnerLayout,params);
-        //spinnerLayout.removeAllViews();
-
-        Spinner spinner = new Spinner(getActivity());
-        ArrayList<String> spinnerArray = new ArrayList<String>();
-        spinnerMap = new HashMap<String, LatLng>();
+        //add current location to spinner
+        spinnerMap.put("Current Location",new LatLng(currentLocLat,currentLocLng));
+        spinnerArray.add("Current Location");
 
         if (followerMarker != null) {
             for (int i = 0; i < followerMarker.length; i++) {
@@ -311,7 +300,7 @@ public class MainFragment extends Fragment implements
                 followerMarker[i] = googleMap.addMarker(markerOptions);
                 //float zoom = 14f;
                 // CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng,zoom);
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(latLng);
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng,zoom);
                 googleMap.animateCamera(cameraUpdate);
             }
 
@@ -319,8 +308,16 @@ public class MainFragment extends Fragment implements
             spinnerArray.add(item.getUser_name());
         }
 
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, spinnerArray);
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, spinnerArray);
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
         spinner.setAdapter(spinnerArrayAdapter);
+
+        //this code to solve error "The specified child already has a parent. You must call removeView() on the child's parent first."
+        //the error happened in this line: spinnerLayout.addView(spinner);
+
+        if (spinner.getParent() != null){
+            ((ViewGroup)spinner.getParent()).removeView(spinner);
+        }
         spinnerLayout.addView(spinner);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -340,7 +337,7 @@ public class MainFragment extends Fragment implements
 
     private void camera(String name) {
         LatLng id = spinnerMap.get(name);
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(id);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(id,zoom);
         googleMap.animateCamera(cameraUpdate);
     }
 
@@ -356,8 +353,28 @@ public class MainFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_main, container, false);
         // Inflate the layout for this fragment
+        rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+
+        usersControlLayout = (LinearLayout)rootView.findViewById(R.id.linearlayout_mainfrag_userscontrol);
+        spinnerLayout = new LinearLayout(getActivity());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        params.gravity = Gravity.CENTER_HORIZONTAL;
+        spinnerLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+
+        usersControlLayout.addView(spinnerLayout,params);
+        //spinnerLayout.removeAllViews();
+
+        spinner = new Spinner(getActivity());
+        spinnerArray = new ArrayList<String>();
+        spinnerMap = new HashMap<String, LatLng>();
+
+
         //initMap();
         createGoogleApi();
         return rootView;

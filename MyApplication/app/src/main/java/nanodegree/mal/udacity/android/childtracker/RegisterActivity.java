@@ -51,10 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (validateParameters()){
                     //insert the data in the DataBase
                     registerUserInDB();
-                    if (accountCreated){
-                        Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
-                        startActivity(intent);
-                    }
+
 
                 }
             }
