@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context="nanodegree.mal.udacity.android.childtracker.activity.JoinParentFragment">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/relativelayout_places1_parentlayout">
+    <ListView
+            android:id="@+id/listview_places_placesname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btn_places_addplace"
+        />
+
+    <TextView
+        android:id="@+id/txt_places_nodata"
+        android:gravity="center"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="@string/txt_places_nodata" />
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_places_addplace"
+            android:text="@string/btn_places_addplace"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="15dp"
+            android:background="@color/Cyan"
+            android:textColor="@color/white"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:textSize="15sp"/>
+</RelativeLayout>
+
+</RelativeLayout>

@@ -59,8 +59,8 @@ import nanodegree.mal.udacity.android.childtracker.WriteLocation;
  */
 public class MainFragment extends Fragment implements
 
-        GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,
-        GoogleMap.OnMapClickListener,GoogleMap.OnMarkerClickListener,OnMapReadyCallback,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener, OnMapReadyCallback,
         NotifyFollowersLocations {
 
     //for map
@@ -91,7 +91,7 @@ public class MainFragment extends Fragment implements
 
     NowLocation nowLocationObject;
 
-    final int FIFTEEN_INTERVAL = 3* 60 * 1000;
+    final int FIFTEEN_INTERVAL = 3 * 60 * 1000;
 
     Timer timer;
 
@@ -118,8 +118,8 @@ public class MainFragment extends Fragment implements
 
     //create google api instance
     private void createGoogleApi() {
-        Log.d(TAG,"createGoogleApi()");
-        if (googleApiClient == null){
+        Log.d(TAG, "createGoogleApi()");
+        if (googleApiClient == null) {
             googleApiClient = new GoogleApiClient.Builder(getContext())
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
@@ -134,8 +134,22 @@ public class MainFragment extends Fragment implements
         super.onResume();
         googleApiClient.connect();
 
-        if (googleMap != null)
+
+        if (googleMap != null) {
             googleMap.clear();
+//            if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                // TODO: Consider calling
+//                //    ActivityCompat#requestPermissions
+//                // here to request the missing permissions, and then overriding
+//                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//                //                                          int[] grantResults)
+//                // to handle the case where the user grants the permission. See the documentation
+//                // for ActivityCompat#requestPermissions for more details.
+//                return;
+//            }
+//            googleMap.setMyLocationEnabled(true);
+//            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+       }
         getFollowersLocation();
 
         //timer to execute code of retrieving followers location every 15 min from the database and update map
@@ -208,10 +222,14 @@ public class MainFragment extends Fragment implements
     }
 
     private void writeActualLocation(Location lastLocation) {
-        currentLocLat = lastLocation.getLatitude();
-        currentLocLng = lastLocation.getLongitude();
-        Toast.makeText(getContext(),currentLocLat +" , "+currentLocLng, Toast.LENGTH_SHORT).show();
-        markerLocation(new LatLng(currentLocLat,currentLocLng),"Current Location"); //to put marker in the current location on the map
+        try {
+            currentLocLat = lastLocation.getLatitude();
+            currentLocLng = lastLocation.getLongitude();
+            Toast.makeText(getContext(), currentLocLat + " , " + currentLocLng, Toast.LENGTH_SHORT).show();
+            markerLocation(new LatLng(currentLocLat, currentLocLng), "Current Location"); //to put marker in the current location on the map
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void markerLocation(LatLng latLng , String title) {
@@ -404,4 +422,6 @@ public class MainFragment extends Fragment implements
         }
         mapFragment.getMapAsync(this);
     }
+
+
 }

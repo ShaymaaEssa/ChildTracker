@@ -16,6 +16,7 @@ import android.view.View;
 import nanodegree.mal.udacity.android.childtracker.activity.FragmentDrawer;
 import nanodegree.mal.udacity.android.childtracker.activity.MainFragment;
 import nanodegree.mal.udacity.android.childtracker.activity.JoinParentFragment;
+import nanodegree.mal.udacity.android.childtracker.activity.PlacesFragment;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener{
 
@@ -81,10 +82,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 title = "MAP";
                 break;
             case 1:
+                fragment = new PlacesFragment();
+                title = "Add Place";
+                break;
+            case 2:
                 fragment = new JoinParentFragment();
                 title = "Join Parent";
                 break;
-            case 2 :
+            case 3 :
                 shareApplicationVia();
                 break;
             default:

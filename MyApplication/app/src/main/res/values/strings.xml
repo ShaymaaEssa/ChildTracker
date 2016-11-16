@@ -32,19 +32,24 @@
     <string name="txt_popup_parentid">Parent ID</string>
     <string name="btn_popup_cancel">Cancel</string>
     <string name="btn_popup_join">Join</string>
+    <string name="txt_places_nodata">No Places Added Yet</string>
+    <string name="btn_places_addplace">Pick A Place</string>
+    <string name="etxt_places2_searchhint">Address...</string>
+    <string name="autocomplete_place2_hint">Enter The Address</string>
+    <string name="btn_places2_addgeofence">Add This Place</string>
 
 
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
         <item>@string/navigation_item_map</item>
-        <!--<item>@string/navigation_item_places</item>-->
+        <item>@string/navigation_item_places</item>
         <item>@string/navigation_item_joinmember</item>
         <item>@string/navigation_item_invitefriend</item>
     </string-array>
 
     <integer-array name="nav_drawer_icons">
         <item>@drawable/map</item>
-        <!--<item>@drawable/places</item>-->
+        <item>@drawable/places</item>
         <item>@drawable/joinmember</item>
         <item>@drawable/addfriend</item>
     </integer-array>
