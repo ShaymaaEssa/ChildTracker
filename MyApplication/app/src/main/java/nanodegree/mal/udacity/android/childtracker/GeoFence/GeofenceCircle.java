@@ -9,11 +9,21 @@ public class GeofenceCircle {
     private double lat;
     private double lng;
     private int radius;
+    private String addressName;
 
-    public GeofenceCircle(double lat, double lng, int radius) {
+    public GeofenceCircle(double lat, double lng, int radius,String addressName) {
         this.lat = lat;
         this.lng = lng;
         this.radius = radius;
+        this.addressName = addressName;
+    }
+
+    public String getAddressName() {
+        return addressName;
+    }
+
+    public void setAddressName(String addressName) {
+        this.addressName = addressName;
     }
 
     public double getLat() {

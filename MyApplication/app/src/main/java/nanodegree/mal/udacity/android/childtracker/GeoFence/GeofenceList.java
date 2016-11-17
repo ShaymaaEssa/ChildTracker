@@ -21,6 +21,7 @@ public class GeofenceList {
     static final String TAG = "GEOFENCE_LIST";
     Gson gson;
 
+
     public GeofenceList(Context context){
         this.context = context;
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -35,7 +36,7 @@ public class GeofenceList {
     }
 
     //save the geofencelist in shared preference
-    public void setGeofenceCircleList(List<GeofenceCircle> geofenceCircleList) {
+    public void  setGeofenceCircleList(List<GeofenceCircle> geofenceCircleList) {
         this.geofenceCircleList = geofenceCircleList;
 
         SharedPreferences.Editor editor = sharedPrefs.edit();

@@ -52,6 +52,8 @@ public class LocationUpdateService extends Service implements android.location.L
 
     String url;
     String userId ;
+    String userName;
+
     static {
         state = State.IDLE;
     }
@@ -83,6 +85,7 @@ public class LocationUpdateService extends Service implements android.location.L
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         userId = getApplicationContext().getSharedPreferences(MyPreferences.MY_PREFERENCES, Context.MODE_PRIVATE).getString(MyPreferences.USER_ID,"0");
+        userName = getApplicationContext().getSharedPreferences(MyPreferences.MY_PREFERENCES, Context.MODE_PRIVATE).getString(MyPreferences.USER_NAME,"0");
 
         Log.i("Myprog_locupdateservice", "On start command");
         if (state == State.IDLE) {
@@ -163,6 +166,7 @@ public class LocationUpdateService extends Service implements android.location.L
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap map  = new HashMap();
                 map.put("userId",userId); //for test
+                map.put("userName",userName);
                 map.put("lat",Double.toString(location.getLatitude()));
                 map.put("lng",Double.toString(location.getLongitude()));
                 return map;
