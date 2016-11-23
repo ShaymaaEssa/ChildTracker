@@ -42,6 +42,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import nanodegree.mal.udacity.android.childtracker.GeoFence.GeofenceCircle;
+import nanodegree.mal.udacity.android.childtracker.GeoFence.GeofenceList;
+import nanodegree.mal.udacity.android.childtracker.MainActivity;
 import nanodegree.mal.udacity.android.childtracker.Manifest;
 import nanodegree.mal.udacity.android.childtracker.R;
 import nanodegree.mal.udacity.android.childtracker.geocoder.DelayAutoCompleteTextView;
@@ -72,10 +78,7 @@ public class AddPlaceFragment extends Fragment implements OnMapReadyCallback, Go
 
     //geofence
     private Marker geoFenceMarker;
-    private static final String GEOFENCE_REQ_ID = "My Geofence";
-    private static final float GEOFENCE_RADIUS = 500.0f; // in meters
-    private PendingIntent geoFencePendingIntent;
-    private final int GEOFENCE_REQ_CODE = 0;
+    private static final int GEOFENCE_RADIUS = 500; // in meters, I set it constant value = 500 meters
     private GoogleApiClient googleApiClient;
     private Circle geoFenceLimits;
 
@@ -88,6 +91,7 @@ public class AddPlaceFragment extends Fragment implements OnMapReadyCallback, Go
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_places2,container,false);
+        setRetainInstance(true);
 
         geo_autocomplete_clear = (ImageView) view.findViewById(R.id.img_places2_clear);
         delayautocomplete_searchtxt = (DelayAutoCompleteTextView) view.findViewById(R.id.delayautocomplete_places2_searchtext);
@@ -143,15 +147,25 @@ public class AddPlaceFragment extends Fragment implements OnMapReadyCallback, Go
         btn_geofence.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PlacesModelList placesModelList = PlacesModelList.getInstance();
-                placesModelList.addItem(new PlacesModel(result.getAddress(),result.getAddressObject().getLatitude(),result.getAddressObject().getLongitude()));
-                getActivity().getFragmentManager().popBackStack();
+                GeofenceCircle newCircle = new GeofenceCircle(result.getAddressObject().getLatitude(),
+                        result.getAddressObject().getLongitude(),
+                        GEOFENCE_RADIUS,result.getAddress());
 
-                //register Geofence
-                //startGeofence();
-
-                //close this fragment and back to PlacesFragment
-                //add this address to the listview of the placesFragment
+                GeofenceList geofenceListObject = new GeofenceList(getActivity());
+                List<GeofenceCircle> list;
+                if (geofenceListObject.getGeofenceCircleList() == null){
+                    list = new ArrayList<GeofenceCircle>();
+                }
+                else
+                list = geofenceListObject.getGeofenceCircleList();
+                list.add(newCircle);
+                geofenceListObject.setGeofenceCircleList(list);
+                //getActivity().getSupportFragmentManager().popBackStackImmediate();
+                Fragment fragment = new PlacesFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.relative_places2_parent, fragment,null)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
         createGoogleApi();
@@ -239,69 +253,6 @@ public class AddPlaceFragment extends Fragment implements OnMapReadyCallback, Go
         return false;
     }
 
-    // Start Geofence creation process
-//    private void startGeofence() {
-//        Log.i(TAG, "startGeofence()");
-//        if( geoFenceMarker != null ) {
-//            Geofence geofence = createGeofence( geoFenceMarker.getPosition(), GEOFENCE_RADIUS );
-//            GeofencingRequest geofenceRequest = createGeofenceRequest( geofence );
-//            addGeofence( geofenceRequest );
-//
-//        } else {
-//            Log.e(TAG, "Geofence marker is null");
-//        }
-//    }
-
-    // Create a Geofence
-    private Geofence createGeofence(LatLng latLng, float radius ) {
-        Log.d(TAG, "createGeofence");
-        return new Geofence.Builder()
-                .setRequestId(GEOFENCE_REQ_ID)
-                .setCircularRegion( latLng.latitude, latLng.longitude, radius)
-                .setExpirationDuration( Geofence.NEVER_EXPIRE )
-                .setTransitionTypes( Geofence.GEOFENCE_TRANSITION_ENTER
-                        | Geofence.GEOFENCE_TRANSITION_EXIT )
-                .build();
-    }
-
-    // Create a Geofence Request
-    private GeofencingRequest createGeofenceRequest(Geofence geofence ) {
-        Log.d(TAG, "createGeofenceRequest");
-        return new GeofencingRequest.Builder()
-                .setInitialTrigger( GeofencingRequest.INITIAL_TRIGGER_ENTER )
-                .addGeofence( geofence )
-                .build();
-    }
-
-    // use a PendingIntent object to call a IntentService that will handle the GeofenceEvent.
-//    private PendingIntent createGeofencePendingIntent() {
-//        Log.d(TAG, "createGeofencePendingIntent");
-//        if ( geoFencePendingIntent != null )
-//            return geoFencePendingIntent;
-//
-//        Intent intent = new Intent( this, GeofenceTrasitionService.class);
-//        return PendingIntent.getService(
-//                getActivity(), GEOFENCE_REQ_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT );
-//    }
-
-    // Add the created GeofenceRequest to the device's monitoring list
-//    private void addGeofence(GeofencingRequest request) {
-//        Log.d(TAG, "addGeofence");
-//        if (checkPermission())
-//            LocationServices.GeofencingApi.addGeofences(
-//                    googleApiClient,
-//                    request,
-//                    createGeofencePendingIntent()
-//            ).setResultCallback(this);
-//    }
-
-    // Check for permission to access Location
-    private boolean checkPermission() {
-        Log.d(TAG, "checkPermission()");
-        // Ask for permission if it wasn't granted yet
-        return (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED );
-    }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -326,5 +277,11 @@ public class AddPlaceFragment extends Fragment implements OnMapReadyCallback, Go
         else
             Toast.makeText(getActivity(),"Geofence failed",Toast.LENGTH_SHORT).show();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MainActivity.setCurrentFragment(MainActivity.ADD_PLACE_FRAGMENT);
     }
 }

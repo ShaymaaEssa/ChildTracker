@@ -33,27 +33,30 @@ public class FCMRegistrationService extends IntentService {
     String userId;
     public FCMRegistrationService() {
         super("FCM");
-        userId = getApplicationContext().getSharedPreferences(MyPreferences.MY_PREFERENCES, Context.MODE_PRIVATE).getString(MyPreferences.USER_ID,"0");
+
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        // get Default Shard Preferences
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        userId = getApplicationContext().getSharedPreferences(MyPreferences.MY_PREFERENCES, Context.MODE_PRIVATE).getString(MyPreferences.USER_ID,"0");
+        if (userId != "0") {
+            // get Default Shard Preferences
+            preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // get token from Firebase
-        String token = FirebaseInstanceId.getInstance().getToken();
+            // get token from Firebase
+            String token = FirebaseInstanceId.getInstance().getToken();
 
-        // check if intent is null or not if it isn't null we will ger refreshed value and
-        // if its true we will override token_sent value to false and apply
-        if (intent.getExtras() != null) {
-            boolean refreshed = intent.getExtras().getBoolean("refreshed");
-            if (refreshed) preferences.edit().putBoolean("token_sent", false).apply();
+            // check if intent is null or not if it isn't null we will ger refreshed value and
+            // if its true we will override token_sent value to false and apply
+            if (intent.getExtras() != null) {
+                boolean refreshed = intent.getExtras().getBoolean("refreshed");
+                if (refreshed) preferences.edit().putBoolean("token_sent", false).apply();
+            }
+
+            // if token_sent value is false then use method sendTokenToServer to send token to server
+            if (!preferences.getBoolean("token_sent", false))
+                sendTokenToServer(token);
         }
-
-        // if token_sent value is false then use method sendTokenToServer to send token to server
-        if (!preferences.getBoolean("token_sent", false))
-            sendTokenToServer(token);
     }
 
     //send the device token to the server
@@ -62,8 +65,8 @@ public class FCMRegistrationService extends IntentService {
         StringRequest request = new StringRequest(Request.Method.POST, ADD_TOKEN_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                int responseCode = Integer.parseInt(response);
-                if (responseCode == 1) {
+                //int responseCode = Integer.parseInt(response);
+                if (response.contains("Send Token Success")) {
                     preferences.edit().putBoolean("token_sent", true).apply();
                     Log.i("Registration Service", "Response : Send Token Success");
                     stopSelf(); //the service must stop itself by calling stopSelf()

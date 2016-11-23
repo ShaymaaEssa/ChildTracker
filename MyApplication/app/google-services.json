@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "901956366621",
-    "firebase_url": "https://childtracker-146221.firebaseio.com",
-    "project_id": "childtracker-146221",
-    "storage_bucket": "childtracker-146221.appspot.com"
+    "project_number": "356356036974",
+    "firebase_url": "https://childtracker-3e3e1.firebaseio.com",
+    "project_id": "childtracker-3e3e1",
+    "storage_bucket": "childtracker-3e3e1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:901956366621:android:4c243aff1225cd55",
+        "mobilesdk_app_id": "1:356356036974:android:4c243aff1225cd55",
         "android_client_info": {
           "package_name": "nanodegree.mal.udacity.android.childtracker"
         }
       },
       "oauth_client": [
         {
-          "client_id": "901956366621-oplma5jsnoisobegdusijnpn80lqcj3s.apps.googleusercontent.com",
+          "client_id": "356356036974-fgmbgc2gqd2qh2btm8i32sodpfqdm3s5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDU7ZrS9KN041iZNQbLeECQSKZG_F-VTq8"
+          "current_key": "AIzaSyCXnmsvgvZYNhCjZjOhAL_VoMFpFpPr1QE"
         }
       ],
       "services": {

@@ -13,38 +13,61 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import nanodegree.mal.udacity.android.childtracker.activity.AddPlaceFragment;
 import nanodegree.mal.udacity.android.childtracker.activity.FragmentDrawer;
 import nanodegree.mal.udacity.android.childtracker.activity.MainFragment;
 import nanodegree.mal.udacity.android.childtracker.activity.JoinParentFragment;
 import nanodegree.mal.udacity.android.childtracker.activity.PlacesFragment;
+import nanodegree.mal.udacity.android.childtracker.firebase.FCMRegistrationService;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener{
 
     private Toolbar toolbar;
     private FragmentDrawer fragmentDrawer;
-
     private String userId;
+
+    //to handle rotation of the device and open the same fragment
+    public static final int MAIN_FRAGMENT = 1;
+    public static final int PLACES_FRAGMENT = 2;
+    public static final int JOIN_PARENT_FRAGMENT = 3;
+    public static final int ADD_PLACE_FRAGMENT = 5;
+
+
+
+    private static int currentFragment = MAIN_FRAGMENT;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar= (Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        userId = this.getSharedPreferences(MyPreferences.MY_PREFERENCES, Context.MODE_PRIVATE).getString(MyPreferences.USER_ID,"0");
 
-       // startService(new Intent(MainActivity.this,LocationUpdateService.class));
+            //to register location at the first use of application
+            startService(new Intent(this, LocationUpdateService.class));
 
-        fragmentDrawer = (FragmentDrawer)
-                getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        fragmentDrawer.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
-        fragmentDrawer.setFragmentDrawerListener(this);
+            startService(new Intent(this, FCMRegistrationService.class));
 
-        // display the first navigation drawer view on app launch
-        displayView(1);
+            toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            userId = this.getSharedPreferences(MyPreferences.MY_PREFERENCES, Context.MODE_PRIVATE).getString(MyPreferences.USER_ID, "0");
+
+
+            fragmentDrawer = (FragmentDrawer)
+                    getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+            fragmentDrawer.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
+            fragmentDrawer.setFragmentDrawerListener(this);
+        if (savedInstanceState == null) {
+            // display the first navigation drawer view on app launch
+            displayView(1);
+        }
+        else {
+            currentFragment = savedInstanceState.getInt("CurrentFragment",1);
+            displayView(currentFragment);
+        }
+
     }
 
     @Override
@@ -92,6 +115,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case 3 :
                 shareApplicationVia();
                 break;
+            case 4:
+                fragment = new AddPlaceFragment();
+                title = "Add Place";
+
             default:
                 break;
         }
@@ -100,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_body, fragment);
+            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
 
             // set the toolbar title
@@ -116,4 +144,15 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("CurrentFragment",currentFragment);
+    }
+
+    public static void setCurrentFragment(int currentFragment) {
+        MainActivity.currentFragment = currentFragment;
+    }
 }
+

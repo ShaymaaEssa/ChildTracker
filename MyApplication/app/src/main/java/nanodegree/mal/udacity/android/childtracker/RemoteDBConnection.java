@@ -21,6 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by MOSTAFA on 19/10/2016.
  */
 
+//this class setup connection to get the children's locations
 public class RemoteDBConnection {
     private Retrofit retrofit;
     private Context context;
@@ -62,6 +63,7 @@ public class RemoteDBConnection {
             @Override
             public void onFailure(Call<FollowersLocationModel> call, Throwable t) {
                 Toast.makeText(context,"Failure in Retrieving Followers Locations",Toast.LENGTH_SHORT).show();
+                if (t.getMessage() != null)
                 Log.e("RetrofitError",t.getMessage());
             }
         });

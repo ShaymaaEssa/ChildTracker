@@ -34,12 +34,19 @@ public class SplashActivity extends AppCompatActivity {
         getSupportActionBar().hide(); //<<  to hide action bar
         setContentView(R.layout.activity_splash);
 
+
+
         if ( !MyPreferences.isFirst(SplashActivity.this)){
             Intent intent = new Intent(SplashActivity.this,MainActivity.class);
             startActivity(intent);
             finish();
         }
         else {
+            //to handle problem of FCM registration token which is fired at the start of application
+            //and we want to start it after login screen
+            MyPreferences temp = new MyPreferences(this);
+            temp.setUserInfo("0","0","0");
+
             if (Build.VERSION.SDK_INT >= 21) {
                 getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             }

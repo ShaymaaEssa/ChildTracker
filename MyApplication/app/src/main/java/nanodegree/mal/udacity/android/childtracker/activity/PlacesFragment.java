@@ -18,20 +18,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nanodegree.mal.udacity.android.childtracker.GeoFence.AddItemToListView;
+import nanodegree.mal.udacity.android.childtracker.GeoFence.GeofenceCircle;
+import nanodegree.mal.udacity.android.childtracker.GeoFence.GeofenceList;
+import nanodegree.mal.udacity.android.childtracker.GeoFence.GeofenceListAdapter;
+import nanodegree.mal.udacity.android.childtracker.MainActivity;
 import nanodegree.mal.udacity.android.childtracker.R;
 import nanodegree.mal.udacity.android.childtracker.model.PlacesModel;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PlacesFragment extends Fragment implements AddItemToListView{
+public class PlacesFragment extends Fragment {
 
     ListView listView_places;
     TextView txt_nodata;
     Button btn_addPlace;
 
-    List<PlacesModel> places ;
-    ArrayAdapter<PlacesModel> adapter;
+    List<GeofenceCircle> geofenceCircleList  = new ArrayList<GeofenceCircle>();
+    GeofenceListAdapter adapter;
 
     public PlacesFragment() {
         // Required empty public constructor
@@ -41,14 +45,21 @@ public class PlacesFragment extends Fragment implements AddItemToListView{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        geofenceCircleList .add(new GeofenceCircle(22.33,22.44,500,"test1"));
+        geofenceCircleList.add(new GeofenceCircle(31.22,31.23,500,"test2"));
+
+        setRetainInstance(true);
+
         View view = inflater.inflate(R.layout.fragment_places1, container, false);
         listView_places = (ListView)view.findViewById(R.id.listview_places_placesname);
         txt_nodata = (TextView)view.findViewById(R.id.txt_places_nodata);
         btn_addPlace = (Button)view.findViewById(R.id.btn_places_addplace);
 
-        adapter = new ArrayAdapter<PlacesModel>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, places);
 
+
+        adapter = new GeofenceListAdapter(getActivity(),R.layout.geofence_listitem,geofenceCircleList);
+        listView_places.setAdapter(adapter);
         btn_addPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,28 +81,44 @@ public class PlacesFragment extends Fragment implements AddItemToListView{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        places = new ArrayList<PlacesModel>();
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (places.size() == 0){
+        MainActivity.setCurrentFragment(MainActivity.PLACES_FRAGMENT);
+        updateAdapter();
+    }
+
+    public void updateAdapter(){
+
+       // geofenceCircleList = new GeofenceList(getActivity()).getGeofenceCircleList();
+        //if ((geofenceCircleList == null) || (geofenceCircleList.size() == 0))
+        if (new GeofenceList(getActivity()).getGeofenceCircleList() == null){
             txt_nodata.setVisibility(View.VISIBLE);
             listView_places.setVisibility(View.INVISIBLE);
 
 
         }
         else {
+            geofenceCircleList.clear();
+            geofenceCircleList.addAll(new GeofenceList(getActivity()).getGeofenceCircleList());
+            adapter.notifyDataSetChanged();
             txt_nodata.setVisibility(View.INVISIBLE);
+            //listView_places.setAdapter(adapter);
             listView_places.setVisibility(View.VISIBLE);
+
+
 
         }
     }
 
+
+
     @Override
-    public void notifyDataInListView(PlacesModel placeItem) {
-        places.add(placeItem);
-        adapter.notifyAll();
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        updateAdapter();
     }
 }

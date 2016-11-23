@@ -3,8 +3,10 @@ package nanodegree.mal.udacity.android.childtracker.firebase;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -16,6 +18,7 @@ import nanodegree.mal.udacity.android.childtracker.GeoFence.GeofenceCircle;
 import nanodegree.mal.udacity.android.childtracker.GeoFence.GeofenceList;
 import nanodegree.mal.udacity.android.childtracker.MainActivity;
 import nanodegree.mal.udacity.android.childtracker.R;
+import nanodegree.mal.udacity.android.childtracker.activity.MainFragment;
 
 /**
  * Created by MOSTAFA on 17/11/2016.
@@ -31,10 +34,14 @@ public class MyFCMessagingService extends FirebaseMessagingService {
     double userLng ;
 
 
+    SharedPreferences preferences;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         //remoteMessage contain user longitude and latitude
         //here set userId, userName, userLat and userLng
         childId = remoteMessage.getData().get("user_id");
@@ -43,6 +50,8 @@ public class MyFCMessagingService extends FirebaseMessagingService {
         userLng = Double.parseDouble(remoteMessage.getData().get("user_lng"));
 
         calculateDistanceUserGeofence(userLat, userLng);
+        //sendNotification("hello");
+
     }
 
     private void calculateDistanceUserGeofence(double userLat, double userLng) {
@@ -67,15 +76,20 @@ public class MyFCMessagingService extends FirebaseMessagingService {
             diffDestance = diffDestance > 0 ? Math.min(1, diffDestance) : Math.max(-1, diffDestance);
             diffDestance = 3959 * 1.609 * 1000 * Math.acos(diffDestance);
 
-            if(diffDestance <circle.getRadius()){  //which mean: the user location inside the geofence circle
+            //which mean: the user location inside the geofence circle
+            //and the user not entered the geofence before
+            if(diffDestance <circle.getRadius() && !preferences.getBoolean("Geofence"+childId+circle.getAddressName(), false)){
                 //set a flag to true so we will not get a duplicate notifications
-                //check this flag in if statement
+                preferences.edit().putBoolean("Geofence"+childId+circle.getAddressName(), true).apply();
 
-                String notificationBody = userName +"is arrived "+circle.getAddressName();
+
+                String notificationBody = userName +" is arrived "+circle.getAddressName();
                 sendNotification(notificationBody); //send notification to user that the child enter the geofence
             }
             else {
                 //set a flag to false
+                //the user not in the geofence
+                preferences.edit().putBoolean("Geofence"+childId+circle.getAddressName(), false).apply();
             }
         }
 

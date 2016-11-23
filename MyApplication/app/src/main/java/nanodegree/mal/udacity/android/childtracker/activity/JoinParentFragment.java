@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import nanodegree.mal.udacity.android.childtracker.MainActivity;
 import nanodegree.mal.udacity.android.childtracker.MyPreferences;
 import nanodegree.mal.udacity.android.childtracker.R;
 
@@ -46,6 +47,7 @@ public class JoinParentFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         userId = getActivity().getSharedPreferences(MyPreferences.MY_PREFERENCES, Context.MODE_PRIVATE).getString(MyPreferences.USER_ID,"0");
     }
 
@@ -93,6 +95,12 @@ public class JoinParentFragment extends Fragment {
         return true;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        MainActivity.setCurrentFragment(MainActivity.JOIN_PARENT_FRAGMENT);
+    }
+
     private void insertJoiningRecord() {
         url = "http://medicalapp.site88.net/ChildTracker/joinfollow.php";
         StringRequest registerUserRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -104,6 +112,11 @@ public class JoinParentFragment extends Fragment {
                     String resultVar = responseParsing.getString("result");
                     if (resultVar.contains("Joined Successfully")){
                         Toast.makeText(getActivity(), "Joined Successfully", Toast.LENGTH_SHORT).show();
+
+                        Fragment fragment = new MainFragment();
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.linearlayout_joinparent_parent, fragment,null)
+                                .commit();
 
                     }else {
                         Toast.makeText(getActivity(), resultVar, Toast.LENGTH_SHORT).show();

@@ -15,11 +15,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -90,9 +92,19 @@ public class LoginActivity extends AppCompatActivity {
 
                         MyPreferences.setUserInfo(userId,userName,userEmail);
                         userLogged = true;
-                        Toast.makeText(LoginActivity.this,"Welcome "+userName+"!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Welcome "+userName+"!",Toast.LENGTH_SHORT).show();
 
                         MyPreferences.setFirst(false);
+
+                        // Resets Instance ID and revokes all tokens.
+//                        try {
+//                            FirebaseInstanceId.getInstance().deleteInstanceId();
+//                            FirebaseInstanceId.getInstance().getToken();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+
+
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
 

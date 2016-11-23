@@ -8,13 +8,10 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -113,6 +110,7 @@ public class MainFragment extends Fragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
 
     }
 
@@ -132,23 +130,13 @@ public class MainFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
+
+        MainActivity.setCurrentFragment(MainActivity.MAIN_FRAGMENT);
         googleApiClient.connect();
 
 
         if (googleMap != null) {
             googleMap.clear();
-//            if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                // TODO: Consider calling
-//                //    ActivityCompat#requestPermissions
-//                // here to request the missing permissions, and then overriding
-//                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//                //                                          int[] grantResults)
-//                // to handle the case where the user grants the permission. See the documentation
-//                // for ActivityCompat#requestPermissions for more details.
-//                return;
-//            }
-//            googleMap.setMyLocationEnabled(true);
-//            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
        }
         getFollowersLocation();
 
@@ -326,18 +314,23 @@ public class MainFragment extends Fragment implements
             spinnerArray.add(item.getUser_name());
         }
 
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, spinnerArray);
-        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
-        spinner.setAdapter(spinnerArrayAdapter);
+       try{
+           if (getView().findViewById(R.id.linearlayout_mainfrag_userscontrol) != null) {
+               ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, spinnerArray);
+               spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
+               spinner.setAdapter(spinnerArrayAdapter);
 
-        //this code to solve error "The specified child already has a parent. You must call removeView() on the child's parent first."
-        //the error happened in this line: spinnerLayout.addView(spinner);
+               //this code to solve error "The specified child already has a parent. You must call removeView() on the child's parent first."
+               //the error happened in this line: spinnerLayout.addView(spinner);
 
-        if (spinner.getParent() != null){
-            ((ViewGroup)spinner.getParent()).removeView(spinner);
-        }
-        spinnerLayout.addView(spinner);
-
+               if (spinner.getParent() != null) {
+                   ((ViewGroup) spinner.getParent()).removeView(spinner);
+               }
+               spinnerLayout.addView(spinner);
+           }
+       } catch (Exception e){
+           e.printStackTrace();
+       }
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -411,6 +404,9 @@ public class MainFragment extends Fragment implements
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        //code to inflate Map Layout in a Main fragment
+        //I inflate it programmatically because it is wrong to put fragment inside fragment in xml layout
         FragmentManager fm = getChildFragmentManager();
         SupportMapFragment mapFragment = (SupportMapFragment) fm.findFragmentByTag("mapFragment");
         if (mapFragment == null) {

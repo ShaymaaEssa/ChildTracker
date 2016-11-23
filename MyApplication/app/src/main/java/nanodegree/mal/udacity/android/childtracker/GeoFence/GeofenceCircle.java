@@ -18,6 +18,8 @@ public class GeofenceCircle {
         this.addressName = addressName;
     }
 
+
+
     public String getAddressName() {
         return addressName;
     }
@@ -48,5 +50,10 @@ public class GeofenceCircle {
 
     public void setRadius(int radius) {
         this.radius = radius;
+    }
+
+    @Override
+    public String toString() {
+        return addressName;
     }
 }

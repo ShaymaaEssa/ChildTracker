@@ -4,7 +4,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="base_url_phpfiles">http://medicalapp.site88.net/ChildTracker/</string>
-    <string name="google_map_key">AIzaSyAmh73TSSUl_U3NrnuCn_OopQeV_CK5yI0</string>
+    <string name="google_map_key">AIzaSyCXnmsvgvZYNhCjZjOhAL_VoMFpFpPr1QE</string>
     <string name="btn_splash_login">Login</string>
     <string name="btn_splash_signup">Register</string>
     <string name="btn_splash_register">Register</string>

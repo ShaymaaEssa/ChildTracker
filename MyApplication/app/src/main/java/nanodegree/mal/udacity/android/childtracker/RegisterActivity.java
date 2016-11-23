@@ -15,10 +15,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,6 +78,13 @@ public class RegisterActivity extends AppCompatActivity {
                         accountCreated = true;
 
                         setPreferencesSetting();
+
+//                        try {
+//                            FirebaseInstanceId.getInstance().deleteInstanceId();
+//                            FirebaseInstanceId.getInstance().getToken();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
 
                         Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
                         startActivity(intent);

@@ -34,7 +34,7 @@ import java.util.Map;
  * Created by MOSTAFA on 28/10/2016.
  */
 
-//this service is a background service which will send location of the user to the database every 15 min with distance exceed 100 m
+//this service is a background service which will send user's location to the database every 15 min with distance exceed 500 m
 public class LocationUpdateService extends Service implements android.location.LocationListener {
     private enum State {
         IDLE, WORKING;
@@ -47,8 +47,9 @@ public class LocationUpdateService extends Service implements android.location.L
     boolean gps_enabled = false;
     boolean network_enabled = false;
 
+    //update location parameters every 15mins and 500 meter
     final static long UPDATE_EVERY_TIME = 15*60*1000; //15 mins
-    final static float UPDATE_EVERY_DISTANCE = 100f; //100 meter
+    final static float UPDATE_EVERY_DISTANCE = 300f; //500 meter
 
     String url;
     String userId ;
@@ -141,16 +142,18 @@ public class LocationUpdateService extends Service implements android.location.L
         Log.i("Myprog_locupdateservice", "Send data to server");
         // send to server in background thread. you might want to start AsyncTask here
         location.getTime();
-        url = "http://medicalapp.site88.net/ChildTracker/InsertCurrentLocation.php";
+
+        //here we fire the firebase and also insert the new location in the DataBase
+        url = "http://medicalapp.site88.net/ChildTracker/serversendnotification.php";
         StringRequest registerUserRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if(response.contains("Current Location inserted")){
-                    Log.i("LocationUpdateService","Current Location Inserted");
+                    Log.i("LocationUpdateService","Current Location Inserted "+ userId);
                 }
 
                 else {
-                    Log.i("LocationUpdateService","Error in Location Insertion");
+                    Log.i("LocationUpdateService","Error in Location Insertion " + response);
                 }
 
 
@@ -165,8 +168,8 @@ public class LocationUpdateService extends Service implements android.location.L
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap map  = new HashMap();
-                map.put("userId",userId); //for test
-                map.put("userName",userName);
+                map.put("user_id",userId); //for test
+                map.put("user_name",userName);
                 map.put("lat",Double.toString(location.getLatitude()));
                 map.put("lng",Double.toString(location.getLongitude()));
                 return map;

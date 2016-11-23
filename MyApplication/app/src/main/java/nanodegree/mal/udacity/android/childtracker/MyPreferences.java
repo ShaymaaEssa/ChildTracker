@@ -10,13 +10,16 @@ import android.content.SharedPreferences;
 public class MyPreferences {
     public static final String MY_PREFERENCES = "my_preferences";
     static boolean firstTime ;
-    static SharedPreferences reader;
+    static SharedPreferences reader ;
 
     //user info
     public static final String USER_ID = "User_Id";
     public static final String USER_NAME = "User_Name";
     public static final String USER_EMAIL = "User_Email";
 
+    public MyPreferences(Context context){
+        reader = context.getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+    }
     public static boolean isFirst(Context context){
         reader = context.getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
         firstTime = reader.getBoolean("is_first", true);
