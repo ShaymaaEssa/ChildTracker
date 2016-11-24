@@ -1,0 +1,8 @@
+ChildTracker Application is an android application that help parents to track their children and know their places and see the places on the map, 
+also parents can set a geofence area and when their children enter the specified geofence, 
+the parents will get notified through a notification message. 
+
+And I used 
+1-FCM technology to send notification for the parent with the location of child, 
+2- GoogleAPIs to implement google maps, 
+3- Volley for remote connection with database on remote server.
